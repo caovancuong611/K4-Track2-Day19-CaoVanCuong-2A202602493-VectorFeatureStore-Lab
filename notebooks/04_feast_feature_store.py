@@ -183,9 +183,12 @@ else:
 
 # %%
 import pandas as pd
+# Profile rows were written at NOW - (i % 48)h, i.e. u_001 at -1h, u_002 at -2h,
+# u_003 at -3h. Each lookup must be AFTER its user's feature timestamp, otherwise
+# PIT correctly finds no value yet and Feast drops the row.
 entity_df = pd.DataFrame({
     "user_id": ["u_001", "u_002", "u_003"],
-    "event_timestamp": [NOW - timedelta(hours=2), NOW - timedelta(hours=1), NOW],
+    "event_timestamp": [NOW - timedelta(minutes=30), NOW - timedelta(hours=1), NOW],
 })
 
 historical = fs.get_historical_features(
